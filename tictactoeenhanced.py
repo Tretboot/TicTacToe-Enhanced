@@ -12,19 +12,7 @@ Wenn ein Spieler drei seiner Symbole in einer Reihe (horizontal, vertikal oder d
 Wenn alle Felder auf dem Spielfeld besetzt sind und kein Spieler gewonnen hat, endet das Spiel unentschieden.
 """
 import pygame
-
-# pygame initialisieren und ein Fenster erstellen
-pygame.init()
-screen = pygame.display.set_mode((800, 600))
-pygame.display.set_caption("Tic Tac Toe with Memory")
-
-# Das Spielfeld als eine zweidimensionale Liste definieren
-# Jede Zelle enthält zwei Elemente: das Symbol (X oder O) und das Ereignis (hidden oder etwas anderes)
-board = [
-    ["X", "nothing", "O", "delete random symbol", "X", "nothing"],
-    ["O", "move again", "X", "nothing", "O", "rotate symbol"],
-    ["X", "nothing", "O", "delete opponent symbol", "X", "nothing"]
-]
+import sys
 
 # Einige Farben definieren
 BLACK = (0, 0, 0)
@@ -35,6 +23,72 @@ BLUE = (0, 0, 255)
 
 # Eine Schriftart definieren
 font = pygame.font.SysFont("Arial", 64)
+
+# Eine Funktion definieren, die den Startbildschirm zeichnet
+def draw_start_screen():
+    global button_x, button_y, button_width, button_height
+
+    # Den Hintergrund des Bildschirms schwarz färben
+    screen.fill(BLACK)
+
+    # Den Titel des Spiels auf dem Bildschirm zeichnen
+    title_text = font.render("Tic Tac Toe with Memory", True, WHITE)
+    title_x = (800 - title_text.get_width()) // 2
+    title_y = 200
+    screen.blit(title_text, (title_x, title_y))
+
+    # Einen Start-Button auf dem Bildschirm zeichnen
+    button_text = font.render("Start", True, BLACK)
+    button_x = (800 - button_text.get_width()) // 2
+    button_y = 400
+    button_width = button_text.get_width() + 20
+    button_height = button_text.get_height() + 20
+    pygame.draw.rect(screen, WHITE, [button_x - 10, button_y - 10, button_width, button_height])
+    screen.blit(button_text, (button_x, button_y))
+
+# pygame initialisieren und ein Fenster erstellen
+pygame.init()
+screen = pygame.display.set_mode((800, 600))
+pygame.display.set_caption("Tic Tac Toe with Memory")
+
+# Den Startbildschirm zeichnen
+draw_start_screen()
+pygame.display.flip()
+
+# Eine Variable definieren, die angibt, ob das Spiel gestartet wurde oder nicht
+game_started = False
+
+# Die Hauptschleife des Spiels
+while True:
+    # Auf Ereignisse reagieren
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            # Überprüfen, ob der Spieler auf den Start-Button geklickt hat
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            if not game_started and button_x - 10 <= mouse_x <= button_x + button_width - 10 and button_y - 10 <= mouse_y <= button_y + button_height - 10:
+                game_started = True
+
+    # Den Bildschirm aktualisieren
+    if game_started:
+        draw_board()
+    else:
+        draw_start_screen()
+
+    # Den Bildschirm aktualisieren
+    pygame.display.flip()
+
+# Das Spielfeld als eine zweidimensionale Liste definieren
+# Jede Zelle enthält zwei Elemente: das Symbol (X oder O) und das Ereignis (hidden oder etwas anderes)
+board = [
+    ["X", "nothing", "O", "delete random symbol", "X", "nothing"],
+    ["O", "move again", "X", "nothing", "O", "rotate symbol"],
+    ["X", "nothing", "O", "delete opponent symbol", "X", "nothing"]
+]
+
+
 
 # Die Größe und den Abstand jeder Zelle definieren
 field_size = 100
@@ -105,11 +159,33 @@ while running:
 
                 # Hier kannst du die Spiellogik implementieren, z.B. prüfen, ob das Ereignis einen Einfluss auf das Spiel hat, ob ein Spieler gewonnen hat, ob das Spiel unentschieden ist, usw.
 
-    # Den Bildschirm mit Schwarz füllen
-    screen.fill(BLACK)
+    # Eine globale Variable definieren, die die Position des Start-Buttons speichert
+button_x = 0
+button_y = 0
+button_width = 0
+button_height = 0
+    
+# Eine Variable definieren, die angibt, ob das Spiel gestartet wurde oder nicht
+game_started = False
 
-    # Das Spielfeld zeichnen
-    draw_board()
+# Die Hauptschleife des Spiels
+while True:
+    # Auf Ereignisse reagieren
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            # Überprüfen, ob der Spieler auf den Start-Button geklickt hat
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            if not game_started and button_x - 10 <= mouse_x <= button_x + button_width - 10 and button_y - 10 <= mouse_y <= button_y + button_height - 10:
+                game_started = True
+
+    # Den Bildschirm aktualisieren
+    if game_started:
+        draw_board()
+    else:
+        draw_start_screen()
 
     # Den Bildschirm aktualisieren
     pygame.display.flip()
