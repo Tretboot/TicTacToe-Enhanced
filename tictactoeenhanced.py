@@ -1,3 +1,16 @@
+"""
+Tic Tac Toe with Memory
+
+Dies ist eine erweiterte Version des klassischen Tic Tac Toe Spiels.
+In dieser Version hat jedes Feld auf dem Spielfeld zwei Eigenschaften: ein Symbol (X oder O) und ein Ereignis.
+Die Ereignisse können verschiedene Aktionen auslösen, wie zum Beispiel das Löschen eines zufälligen Symbols, das erneute Ziehen eines Spielers oder das Verschieben aller Symbole um eine Zeile nach unten.
+
+Das Besondere an diesem Spiel ist, dass die Ereignisse bei jedem Spiel zufällig verteilt werden. Das bedeutet, dass jedes Spiel eine neue Herausforderung ist, da die Spieler nicht wissen, welche Ereignisse auf welchen Feldern liegen.
+
+Das Spiel wird von zwei Spielern gespielt. Die Spieler setzen abwechselnd ihr Symbol (X oder O) auf ein freies Feld auf dem Spielfeld.
+Wenn ein Spieler drei seiner Symbole in einer Reihe (horizontal, vertikal oder diagonal) hat, gewinnt er das Spiel.
+Wenn alle Felder auf dem Spielfeld besetzt sind und kein Spieler gewonnen hat, endet das Spiel unentschieden.
+"""
 import pygame
 
 # pygame initialisieren und ein Fenster erstellen
@@ -8,10 +21,9 @@ pygame.display.set_caption("Tic Tac Toe with Memory")
 # Das Spielfeld als eine zweidimensionale Liste definieren
 # Jede Zelle enthält zwei Elemente: das Symbol (X oder O) und das Ereignis (hidden oder etwas anderes)
 board = [
-    ["X", "nothing", "O", "delete random symbol"],
-    ["O", "move again", "X", "nothing"],
-    ["X", "nothing", "O", "rotate symbol"],
-    ["O", "delete opponent symbol", "X", "nothing"]
+    ["X", "nothing", "O", "delete random symbol", "X", "nothing"],
+    ["O", "move again", "X", "nothing", "O", "rotate symbol"],
+    ["X", "nothing", "O", "delete opponent symbol", "X", "nothing"]
 ]
 
 # Einige Farben definieren
@@ -32,9 +44,12 @@ board_y = 100
 
 # Eine Funktion definieren, die das Spielfeld auf dem Bildschirm zeichnet
 def draw_board():
-    # Durch jede Reihe und Spalte des Spielfelds iterieren
-    for row in range(4):
-        for col in range(4):
+    for row in range(3):
+        for col in range(3):
+            if col * 2 >= len(board[row]):
+                print(f"Ungültiger Index: {row=}, {col=}")
+            else:
+                symbol = board[row][col * 2]
             # Die Position und Größe jeder Zelle berechnen
             x = board_x + col * (field_size + field_margin)
             y = board_y + row * (field_size + field_margin)
